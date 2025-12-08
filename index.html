@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mantenimiento Animal</title>
+
+    <!-- Bootstrap 5 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        defer
+    ></script>
+
+    <!-- Estilos personalizados -->
+    <style>
+        :root {
+            --verde-suculenta: #2e7d5b;
+            --verde-pistacho: #a4e27a;
+            --verde-pistacho-suave: #d8f5c5;
+            --texto-principal: #1f2933;
+            --fondo-claro: #ffffff;
+            --fondo-suave: #f5f8f4;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            min-height: 100vh;
+        }
+
+        body.light-theme {
+            background: radial-gradient(circle at top, var(--verde-pistacho-suave) 0, #fdfdfd 40%, #f3f3f3 100%);
+            color: var(--texto-principal);
+        }
+
+        body.dark-theme {
+            background: radial-gradient(circle at top, #050d09 0, #050807 60%, #000000 100%);
+            color: #f9fafb;
+        }
+
+        /* HEADER */
+        .blog-header {
+            padding: 1.5rem 0 0.5rem;
+        }
+
+        .logo-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--verde-pistacho);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--verde-suculenta), var(--verde-pistacho));
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+        }
+
+        .brand-title {
+            font-weight: 700;
+            margin-top: 0.75rem;
+        }
+
+        .brand-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+
+        .theme-toggle-wrapper {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .theme-toggle-btn {
+            border-radius: 999px;
+            padding-inline: 1rem;
+        }
+
+        body.light-theme .theme-toggle-btn {
+            background: #ffffff;
+            color: var(--texto-principal);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        body.dark-theme .theme-toggle-btn {
+            background: rgba(0,0,0,0.35);
+            color: #f9fafb;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .animal-strip {
+            font-size: 1.4rem;
+            padding: 0.4rem 0;
+        }
+
+        /* IMÁGENES */
+        .welcome-image,
+        .post-image {
+            width: 100%;
+            height: 260px;
+            border-radius: 1.25rem;
+            object-fit: cover;
+        }
+
+        @media (max-width: 576px) {
+            .welcome-image,
+            .post-image {
+                height: 220px;
+            }
+        }
+
+        /* TARJETAS CENTRADAS */
+        .welcome-card {
+            border-radius: 1.5rem;
+        }
+
+        body.light-theme .welcome-card {
+            background: linear-gradient(135deg, var(--verde-pistacho-suave), #ffffff);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+
+        body.dark-theme .welcome-card {
+            background: radial-gradient(circle at top, #17241c 0, #020705 70%);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .intro-card,
+        .post-card {
+            border-radius: 1.25rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        body.light-theme .intro-card {
+            background: rgba(216,245,197,0.6);
+        }
+
+        body.dark-theme .intro-card {
+            background: rgba(20,28,22,0.9);
+        }
+
+        body.light-theme .post-card {
+            background: var(--fondo-claro);
+        }
+
+        body.dark-theme .post-card {
+            background: #111717;
+        }
+
+        .intro-inner,
+        .post-inner {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 576px) {
+            .intro-inner,
+            .post-inner {
+                max-width: 100%;
+            }
+        }
+
+        /* BIENVENIDA */
+        .welcome-choice-btn {
+            border-radius: 999px;
+        }
+
+        .welcome-info {
+            border-radius: 1rem;
+            font-size: 0.9rem;
+        }
+
+        body.light-theme .welcome-info {
+            background: rgba(255,255,255,0.85);
+        }
+
+        body.dark-theme .welcome-info {
+            background: rgba(0,0,0,0.35);
+        }
+
+        /* POSTS */
+        .post-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            background: rgba(164,226,122,0.16);
+            color: var(--verde-pistacho);
+            font-weight: 600;
+        }
+
+        .post-title {
+            font-weight: 700;
+        }
+
+        .post-meta {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .post-card p {
+            text-align: justify;
+        }
+
+        .video-placeholder {
+            border-style: dashed;
+        }
+
+        /* CONTROLES LIBRO */
+        .book-controls {
+            border-radius: 999px;
+            padding: 0.4rem 0.75rem;
+            background-color: rgba(255,255,255,0.85);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        }
+
+        body.dark-theme .book-controls {
+            background-color: rgba(0,0,0,0.45);
+        }
+
+        .book-controls .status-text {
+            min-width: 150px;
+        }
+
+        /* SLIDER HORIZONTAL */
+        .post-slider-wrapper {
+            overflow: hidden;
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .post-slider {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .post-slider > article {
+            min-width: 100%;
+            flex-shrink: 0;
+        }
+
+        /* COMENTARIOS */
+        .comment-section {
+            border-top: 1px dashed rgba(148,163,184,0.6);
+            padding-top: 1.25rem;
+        }
+
+        .comment-card {
+            border-radius: 0.9rem;
+            padding: 0.6rem 0.8rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        body.light-theme .comment-card {
+            background: var(--fondo-suave);
+        }
+
+        body.dark-theme .comment-card {
+            background: #141c16;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 0.86rem;
+        }
+
+        .comment-text {
+            margin: 0.15rem 0 0;
+            font-size: 0.9rem;
+        }
+
+        .footer-note {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- HEADER -->
+    <header class="blog-header">
+        <div class="container">
+            <!-- Botón tema -->
+            <div class="theme-toggle-wrapper mb-2">
+                <button id="themeToggle" class="btn theme-toggle-btn d-flex align-items-center gap-2">
+                    <span id="themeIcon">🌞</span>
+                    <span id="themeLabel" class="d-none d-md-inline">Modo claro</span>
+                </button>
+            </div>
+
+            <!-- Logo y texto centrado -->
+            <div class="text-center">
+                <div class="logo-circle mx-auto">
+                    MA
+                </div>
+                <h1 class="brand-title">Mantenimiento Animal</h1>
+                <p class="brand-subtitle">
+                    Bienestar responsable para mascotas y ganado 🐾🐄
+                </p>
+                <div class="animal-strip">
+                    🐶 🐱 🐴 🐄 🐖 🐑 🐓
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- PANTALLA DE BIENVENIDA -->
+    <section class="pb-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="welcome-card p-3 p-md-4">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-6">
+                                <h2 class="h4 mb-2">Bienvenido al espacio de mantenimiento animal</h2>
+                                <p class="mb-2">
+                                    Antes de entrar a las entradas, marca qué tipo de animales sueles cuidar.
+                                    Te damos una pequeña guía para empezar con el enfoque correcto.
+                                </p>
+                                <div class="d-flex flex-wrap gap-2 my-3">
+                                    <button class="btn btn-success welcome-choice-btn" data-choice="mascotas">
+                                        🐕 Mascotas
+                                    </button>
+                                    <button class="btn btn-outline-success welcome-choice-btn" data-choice="ganado">
+                                        🐄 Ganadería
+                                    </button>
+                                    <button class="btn btn-outline-success welcome-choice-btn" data-choice="ambos">
+                                        🐾 Ambos
+                                    </button>
+                                </div>
+                                <div class="welcome-info p-3 mt-1" id="welcomeInfo">
+                                    <strong>Consejo inicial 🐾:</strong>
+                                    <p class="mb-0">
+                                        Empieza por la entrada de <strong>consejos</strong> para ver los cuidados básicos del día a día.
+                                        Después pasa a la <strong>importancia</strong> y los <strong>beneficios</strong> para entender el impacto a largo plazo.
+                                    </p>
+                                </div>
+                                <button class="btn btn-link p-0 mt-3 small" id="scrollToPosts">
+                                    ↓ Ver las entradas del blog
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <img
+                                    src="https://images.pexels.com/photos/6234633/pexels-photo-6234633.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                                    alt="Veterinaria junto a un perro durante una revisión"
+                                    class="img-fluid welcome-image"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTRO GENERAL -->
+    <section class="pb-4" id="postsTop">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <div class="intro-card p-3 p-md-4">
+                        <div class="intro-inner">
+                            <h2 class="h4 mb-2">Importancia y beneficios del mantenimiento animal.</h2>
+                            <p class="mb-2">
+                                En este blog abordaremos diversos aspectos relacionados con el mantenimiento y bienestar animal,
+                                tanto en el ámbito doméstico como en el entorno de producción ganadera. Nuestro propósito es
+                                ofrecer información clara y útil que contribuya a una gestión responsable, segura y respetuosa
+                                de los animales bajo nuestro cuidado.
+                            </p>
+                            <p class="mb-0">
+                                Cada entrada está pensada para que personas cuidadoras, familias y productores ganaderos
+                                encuentren guía práctica para proteger la salud, el comportamiento y la calidad de vida de
+                                los animales que les acompañan día a día.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="pb-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- Columna centrada -->
+                <div class="col-lg-9">
+
+                    <!-- Controles tipo "libro" -->
+                    <div class="book-controls d-flex align-items-center justify-content-between mb-3">
+                        <button id="prevPost" class="btn btn-outline-success btn-sm">
+                            ⬅️ Entrada anterior
+                        </button>
+                        <div class="small text-muted text-center status-text">
+                            Entrada <span id="currentPostIndex">1</span> de <span id="totalPosts">3</span>
+                        </div>
+                        <button id="nextPost" class="btn btn-outline-success btn-sm">
+                            Siguiente entrada ➡️
+                        </button>
+                    </div>
+
+                    <!-- Slider horizontal de entradas -->
+                    <div class="post-slider-wrapper mb-4">
+                        <div class="post-slider" id="postSlider">
+
+                            <!-- ENTRADA 1 -->
+                            <article class="post-card p-3 p-md-4" data-post-id="post-1">
+                                <div class="post-inner">
+                                    <div class="mb-3">
+                                        <img
+                                            src="https://images.pexels.com/photos/7469216/pexels-photo-7469216.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                                            alt="Perro siendo revisado en una clínica veterinaria"
+                                            class="post-image img-fluid"
+                                        >
+                                    </div>
+
+                                    <span class="post-badge">Consejos</span>
+                                    <h2 class="post-title mt-2">Mantenimiento animal: consejos.</h2>
+                                    <p class="post-meta mb-2">Publicado el 7 de diciembre de 2025 · Mascotas y animales de granja</p>
+
+                                    <p>
+                                        El mantenimiento animal abarca el conjunto de procedimientos y cuidados orientados a garantizar el bienestar físico y emocional de los animales, ya sean de compañía o de producción. Este enfoque implica atender de manera responsable aspectos esenciales como la alimentación equilibrada, la higiene adecuada, el alojamiento seguro y confortable, así como la prevención y el control de enfermedades mediante prácticas sanitarias apropiadas.
+                                    </p>
+                                    <p>
+                                        En el caso de los animales domésticos, el mantenimiento incluye ofrecer un entorno saludable, enriquecimiento ambiental, socialización y atención veterinaria regular, siempre considerando las necesidades específicas de cada especie y etapa de vida.
+                                    </p>
+
+                                    <!-- ESPACIO PARA VIDEO -->
+                                    <div class="ratio ratio-16x9 video-placeholder border border-success-subtle rounded-4 d-flex align-items-center justify-content-center my-3">
+                                        <span class="text-muted">
+                                            Aquí irá tu video sobre mantenimiento animal
+                                        </span>
+                                    </div>
+
+                                    <p>
+                                        Por otro lado, en el ámbito de los animales de granja, el mantenimiento se vincula también con la gestión eficiente de instalaciones, el manejo racional de recursos, la bioseguridad y el cumplimiento de normativas que aseguren condiciones de bienestar y producción sostenible.
+                                    </p>
+
+                                    <!-- COMENTARIOS ENTRADA 1 -->
+                                    <section class="comment-section mt-3">
+                                        <h5 class="mb-3">Comentarios</h5>
+                                        <div class="comments-list" data-comments-container></div>
+
+                                        <form class="comment-form mt-3" autocomplete="off">
+                                            <div class="row g-2">
+                                                <div class="col-md-4">
+                                                    <label class="form-label mb-1">Nombre</label>
+                                                    <input type="text" class="form-control" name="author" placeholder="Tu nombre">
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <label class="form-label mb-1">Comentario</label>
+                                                    <textarea class="form-control" name="comment" rows="2" placeholder="Comparte tu experiencia cuidando animales."></textarea>
+                                                </div>
+                                                <div class="col-12 mt-2">
+                                                    <button type="submit" class="btn btn-success px-4">
+                                                        Publicar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </section>
+                                </div>
+                            </article>
+
+                            <!-- ENTRADA 2 -->
+                            <article class="post-card p-3 p-md-4" data-post-id="post-2">
+                                <div class="post-inner">
+                                    <div class="mb-3">
+                                        <img
+                                            src="https://images.pexels.com/photos/6816836/pexels-photo-6816836.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                                            alt="Gato siendo examinado por un veterinario"
+                                            class="post-image img-fluid"
+                                        >
+                                    </div>
+
+                                    <span class="post-badge">Importancia</span>
+                                    <h2 class="post-title mt-2">Importancia del mantenimiento animal</h2>
+                                    <p class="post-meta mb-2">Publicado el 7 de diciembre de 2025 · Bienestar y responsabilidad</p>
+
+                                    <p>
+                                        La importancia del mantenimiento animal se basa en garantizar la salud, el bienestar y el adecuado desarrollo de los animales que dependen del cuidado humano. Mediante prácticas responsables, como una alimentación equilibrada, una higiene correcta y un seguimiento veterinario regular, es posible prevenir enfermedades y reducir el estrés, asegurando condiciones de vida dignas tanto para animales domésticos como de granja.
+                                    </p>
+                                    <p>
+                                        Además de mejorar su calidad de vida, un buen mantenimiento repercute positivamente en la convivencia y en la productividad. En el caso de los animales de compañía, favorece comportamientos equilibrados y una relación más armónica con su entorno. En los animales de producción, contribuye a un mejor rendimiento, disminuye riesgos sanitarios y evita pérdidas económicas, permitiendo una gestión más eficiente y sostenible.
+                                    </p>
+                                    <p class="mb-0">
+                                        En conjunto, el mantenimiento responsable beneficia directamente a los animales, pero también impacta en la salud pública, la seguridad alimentaria y el bienestar de las comunidades. Implementar estas prácticas promueve entornos más seguros, éticos y respetuosos, reforzando el compromiso con una convivencia responsable y consciente.
+                                    </p>
+
+                                    <!-- COMENTARIOS ENTRADA 2 -->
+                                    <section class="comment-section mt-3">
+                                        <h5 class="mb-3">Comentarios</h5>
+                                        <div class="comments-list" data-comments-container></div>
+
+                                        <form class="comment-form mt-3" autocomplete="off">
+                                            <div class="row g-2">
+                                                <div class="col-md-4">
+                                                    <label class="form-label mb-1">Nombre</label>
+                                                    <input type="text" class="form-control" name="author" placeholder="Tu nombre">
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <label class="form-label mb-1">Comentario</label>
+                                                    <textarea class="form-control" name="comment" rows="2" placeholder="¿Por qué es importante para ti el bienestar animal?"></textarea>
+                                                </div>
+                                                <div class="col-12 mt-2">
+                                                    <button type="submit" class="btn btn-success px-4">
+                                                        Publicar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </section>
+                                </div>
+                            </article>
+
+                            <!-- ENTRADA 3 -->
+                            <article class="post-card p-3 p-md-4" data-post-id="post-3">
+                                <div class="post-inner">
+                                    <div class="mb-3">
+                                        <img
+                                            src="https://images.pexels.com/photos/32960900/pexels-photo-32960900.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                                            alt="Ganadero atendiendo vacas en un campo verde"
+                                            class="post-image img-fluid"
+                                        >
+                                    </div>
+
+                                    <span class="post-badge">Beneficios</span>
+                                    <h2 class="post-title mt-2">Beneficios del mantenimiento animal</h2>
+                                    <p class="post-meta mb-2">Publicado el 7 de diciembre de 2025 · Impacto y resultados</p>
+
+                                    <p>
+                                        Los beneficios del mantenimiento animal adecuado se reflejan, en primer lugar, en la mejora directa del bienestar y la salud de los animales. Una correcta alimentación, la higiene constante y la prevención de enfermedades permiten que tanto los animales domésticos como los de granja vivan en condiciones óptimas, reduciendo el riesgo de padecer estrés, infecciones o problemas de comportamiento.
+                                    </p>
+                                    <p>
+                                        Además, un buen mantenimiento contribuye a fortalecer la relación entre humanos y animales. En el caso de las mascotas, mejora la convivencia, favorece la socialización y promueve comportamientos equilibrados.
+                                    </p>
+                                    <p>
+                                        Para los animales de producción, estas prácticas se traducen en un ambiente más estable y seguro, lo que facilita su manejo diario y evita situaciones de riesgo tanto para ellos como para los cuidadores.
+                                    </p>
+                                    <p class="mb-0">
+                                        Por otro lado, mantener a los animales en buenas condiciones también aporta beneficios económicos y productivos. En la ganadería, animales sanos y bien cuidados presentan un mejor rendimiento, lo que se refleja en mayor calidad y cantidad de productos, así como en una reducción de costos derivados de enfermedades o pérdidas. A nivel general, el mantenimiento responsable contribuye a entornos más sostenibles, éticos y seguros para todas las personas involucradas.
+                                    </p>
+
+                                    <!-- COMENTARIOS ENTRADA 3 -->
+                                    <section class="comment-section mt-3">
+                                        <h5 class="mb-3">Comentarios</h5>
+                                        <div class="comments-list" data-comments-container></div>
+
+                                        <form class="comment-form mt-3" autocomplete="off">
+                                            <div class="row g-2">
+                                                <div class="col-md-4">
+                                                    <label class="form-label mb-1">Nombre</label>
+                                                    <input type="text" class="form-control" name="author" placeholder="Tu nombre">
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <label class="form-label mb-1">Comentario</label>
+                                                    <textarea class="form-control" name="comment" rows="2" placeholder="¿Qué beneficios has visto en tus animales?"></textarea>
+                                                </div>
+                                                <div class="col-12 mt-2">
+                                                    <button type="submit" class="btn btn-success px-4">
+                                                        Publicar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </section>
+                                </div>
+                            </article>
+
+                        </div>
+                    </div>
+
+                    <!-- CONCLUSIÓN -->
+                    <article class="post-card p-3 p-md-4">
+                        <div class="post-inner">
+                            <span class="post-badge">Conclusión</span>
+                            <h2 class="post-title mt-2">Cuidar bien es respetar la vida</h2>
+                            <p class="post-meta mb-2">Cierre del tema · Bienestar y sostenibilidad</p>
+
+                            <p>
+                                En conclusión, el mantenimiento animal representa un pilar fundamental para garantizar el bienestar, la salud y el desarrollo adecuado de los animales que forman parte de nuestra vida, ya sea en el hogar o en el ámbito productivo. Adoptar prácticas responsables no solo mejora sus condiciones de vida, sino que también fortalece la relación entre humanos y animales, impulsa una producción más eficiente y contribuye a entornos más seguros y sostenibles.
+                            </p>
+                            <p class="mb-0">
+                                A través de este blog esperamos haber aportado información útil y accesible que motive a seguir promoviendo un cuidado consciente y respetuoso. Continuar profundizando en estos temas es esencial para avanzar hacia una convivencia más equilibrada y ética, donde el bienestar animal sea siempre una prioridad compartida.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- FOOTER COPYRICHY -->
+                    <p class="footer-note text-center mt-4" id="footerCopy"></p>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JS: tema + slider + comentarios + bienvenida + footer -->
+    <script>
+        // ---------- MODO OSCURO / CLARO ----------
+        const bodyEl = document.body;
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeLabel = document.getElementById('themeLabel');
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                bodyEl.classList.remove('light-theme');
+                bodyEl.classList.add('dark-theme');
+                themeIcon.textContent = '🌙';
+                if (themeLabel) themeLabel.textContent = 'Modo oscuro';
+            } else {
+                bodyEl.classList.remove('dark-theme');
+                bodyEl.classList.add('light-theme');
+                themeIcon.textContent = '🌞';
+                if (themeLabel) themeLabel.textContent = 'Modo claro';
+            }
+            localStorage.setItem('blogTheme', theme);
+        }
+
+        const savedTheme = localStorage.getItem('blogTheme') || 'light';
+        applyTheme(savedTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = bodyEl.classList.contains('dark-theme') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
+
+        // ---------- UTILIDADES COMENTARIOS ----------
+        function loadComments(postId) {
+            const key = 'comments_' + postId;
+            const raw = localStorage.getItem(key);
+            try {
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                console.error('Error leyendo comentarios', e);
+                return [];
+            }
+        }
+
+        function saveComments(postId, comments) {
+            const key = 'comments_' + postId;
+            localStorage.setItem(key, JSON.stringify(comments));
+        }
+
+        function renderComments(container, comments) {
+            container.innerHTML = '';
+            if (comments.length === 0) {
+                container.innerHTML = '<p class="mb-2 text-muted" style="font-size:0.85rem;">Sé el primero en comentar.</p>';
+                return;
+            }
+            comments.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'comment-card';
+                div.innerHTML = `
+                    <div class="comment-author">${c.author || 'Anónimo'}</div>
+                    <p class="comment-text mb-0">${c.text}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // ---------- SLIDER TIPO LIBRO ----------
+            const slider = document.getElementById('postSlider');
+            const slides = slider ? slider.querySelectorAll('article[data-post-id]') : [];
+            const prevBtn = document.getElementById('prevPost');
+            const nextBtn = document.getElementById('nextPost');
+            const currentLabel = document.getElementById('currentPostIndex');
+            const totalLabel = document.getElementById('totalPosts');
+
+            let currentIndex = 0;
+
+            if (totalLabel) totalLabel.textContent = slides.length;
+
+            function updateSlider() {
+                if (!slider || slides.length === 0) return;
+                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                if (currentLabel) currentLabel.textContent = currentIndex + 1;
+                if (prevBtn) prevBtn.disabled = currentIndex === 0;
+                if (nextBtn) nextBtn.disabled = currentIndex === slides.length - 1;
+            }
+
+            if (prevBtn && nextBtn && slides.length > 0) {
+                prevBtn.addEventListener('click', () => {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        updateSlider();
+                    }
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    if (currentIndex < slides.length - 1) {
+                        currentIndex++;
+                        updateSlider();
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowRight' && !nextBtn.disabled) {
+                        nextBtn.click();
+                    } else if (e.key === 'ArrowLeft' && !prevBtn.disabled) {
+                        prevBtn.click();
+                    }
+                });
+
+                updateSlider();
+            }
+
+            // ---------- COMENTARIOS POR ENTRADA ----------
+            const posts = document.querySelectorAll('article[data-post-id]');
+
+            posts.forEach(post => {
+                const postId = post.getAttribute('data-post-id');
+                const commentsContainer = post.querySelector('[data-comments-container]');
+                const form = post.querySelector('.comment-form');
+
+                if (!commentsContainer || !form) return;
+
+                const storedComments = loadComments(postId);
+                renderComments(commentsContainer, storedComments);
+
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const authorInput = form.querySelector('input[name="author"]');
+                    const commentInput = form.querySelector('textarea[name="comment"]');
+
+                    const author = authorInput.value.trim();
+                    const text = commentInput.value.trim();
+
+                    if (!text) {
+                        alert('Escribe un comentario con algo de contenido.');
+                        return;
+                    }
+
+                    const comments = loadComments(postId);
+                    comments.push({
+                        author: author || 'Anónimo',
+                        text,
+                        date: new Date().toISOString()
+                    });
+
+                    saveComments(postId, comments);
+                    renderComments(commentsContainer, comments);
+
+                    commentInput.value = '';
+                });
+            });
+
+            // ---------- BIENVENIDA INTERACTIVA ----------
+            const welcomeButtons = document.querySelectorAll('.welcome-choice-btn');
+            const welcomeInfo = document.getElementById('welcomeInfo');
+            const scrollToPostsBtn = document.getElementById('scrollToPosts');
+            const postsTop = document.getElementById('postsTop');
+
+            const messages = {
+                mascotas: {
+                    title: 'Enfoque: mascotas 🐶🐱',
+                    text: 'Empieza por la entrada de consejos para ver higiene, ambiente y visitas al veterinario. Después lee la importancia y los beneficios para conectar tu rutina con su bienestar emocional.'
+                },
+                ganado: {
+                    title: 'Enfoque: ganadería 🐄🐑',
+                    text: 'Ve primero a la importancia del mantenimiento, luego a los beneficios. Verás cómo la bioseguridad, las instalaciones y el manejo reducen pérdidas y mejoran la producción.'
+                },
+                ambos: {
+                    title: 'Enfoque mixto 🐾',
+                    text: 'Lee las tres entradas en orden: consejos, importancia y beneficios. Así verás cómo los mismos principios se adaptan tanto a mascotas como a animales de producción.'
+                }
+            };
+
+            welcomeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const choice = btn.getAttribute('data-choice');
+
+                    welcomeButtons.forEach(b => {
+                        b.classList.remove('btn-success');
+                        b.classList.add('btn-outline-success');
+                    });
+                    btn.classList.remove('btn-outline-success');
+                    btn.classList.add('btn-success');
+
+                    if (welcomeInfo && messages[choice]) {
+                        welcomeInfo.innerHTML = `
+                            <strong>${messages[choice].title}</strong>
+                            <p class="mb-0">${messages[choice].text}</p>
+                        `;
+                    }
+                });
+            });
+
+            if (scrollToPostsBtn && postsTop) {
+                scrollToPostsBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    postsTop.scrollIntoView({ behavior: 'smooth' });
+                });
+            }
+
+            // ---------- FOOTER COPYRICHY ----------
+            const footer = document.getElementById('footerCopy');
+            const year = new Date().getFullYear();
+            footer.innerHTML = `© ${year} · 🐾 copyrichy · Mantenimiento Animal 🌿`;
+        });
+    </script>
+</body>
+</html>
